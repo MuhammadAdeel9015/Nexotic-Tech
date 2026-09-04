@@ -1,0 +1,56 @@
+[
+  {
+    "id": "ai-neural-dashboard",
+    "image": "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=800&q=85",
+    "alt": "AI analytics dashboard",
+    "tag": "AI | SaaS",
+    "title": "AI Neural Dashboard",
+    "description": "Real-time enterprise analytics powered by machine learning.",
+    "stack": "React | Python | OpenAI"
+  },
+  {
+    "id": "dev-platform",
+    "image": "https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=800&q=85",
+    "alt": "SaaS platform code",
+    "tag": "SaaS | Web",
+    "title": "DevPlatform",
+    "description": "Cloud-native foundations for scalable enterprise operations.",
+    "stack": "Next.js | Node.js | PostgreSQL"
+  },
+  {
+    "id": "cyber-shield",
+    "image": "https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&w=800&q=85",
+    "alt": "Cybersecurity monitoring interface",
+    "tag": "Automation | Web",
+    "title": "CyberShield",
+    "description": "Cybersecurity monitoring with automated response agents.",
+    "stack": "TypeScript | Tailwind | Docker"
+  },
+  {
+    "id": "commerce-one",
+    "image": "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=800&q=85",
+    "alt": "E-commerce shopping experience",
+    "tag": "E-commerce | Shopify",
+    "title": "Commerce One",
+    "description": "A conversion-led storefront experience for a growing brand.",
+    "stack": "Shopify | UX | SEO"
+  },
+  {
+    "id": "field-flow",
+    "image": "https://images.unsplash.com/photo-1551650975-87deedd944c3?auto=format&fit=crop&w=800&q=85",
+    "alt": "Mobile application on phone",
+    "tag": "Mobile | UI/UX",
+    "title": "FieldFlow",
+    "description": "A focused mobile workflow for teams on the move.",
+    "stack": "React Native | Figma | APIs"
+  },
+  {
+    "id": "launch-lab",
+    "image": "https://images.unsplash.com/photo-1551434678-e076c223a692?auto=format&fit=crop&w=800&q=85",
+    "alt": "Product team collaborating",
+    "tag": "Collaboration | Product",
+    "title": "Launch Lab",
+    "description": "Product collaboration for an ambitious early-stage team.",
+    "stack": "Discovery | Prototyping | Strategy"
+  }
+]

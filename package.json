@@ -1,0 +1,15 @@
+{
+  "name": "nexotic-tech-site",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Nexotic Tech website and contact form backend",
+  "main": "backend/server.js",
+  "scripts": {
+    "start": "node backend/server.js",
+    "migrate:supabase": "node backend/migrate-json-to-supabase.js",
+    "build:frontend": "node scripts/build-frontend.js"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.114.0"
+  }
+}

@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Admin | Nexotic Tech</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body class="admin-page">
+<header class="admin-topbar">
+  <div class="container admin-topbar-inner">
+    <a class="brand" href="index.html">NEXOTIC TECH</a>
+    <div class="admin-topbar-actions">
+      <a class="button ghost" href="projects.html">View portfolio</a>
+      <button id="logout-button" class="button ghost admin-logout" type="button">Logout</button>
+    </div>
+  </div>
+</header>
+<main class="admin-shell">
+  <section class="admin-intro">
+    <span class="eyebrow">SECURE ACCESS</span>
+    <h1>Portfolio<br><span class="gradient">control.</span></h1>
+    <p class="lead">Manage the public portfolio, publish new project highlights and keep your digital presence current.</p>
+    <ul class="admin-feature-list">
+      <li>Project publishing</li>
+      <li>Portfolio management</li>
+      <li>Lead inbox review</li>
+    </ul>
+  </section>
+
+  <section class="admin-card-wrap">
+    <form id="admin-login" class="admin-card form">
+      <div class="admin-card-header">
+        <span class="admin-badge">Private</span>
+        <h2>Admin sign in</h2>
+      </div>
+      <div class="field">
+        <label for="username">USERNAME</label>
+        <input id="username" name="username" autocomplete="username" required>
+      </div>
+      <div class="field">
+        <label for="password">PASSWORD</label>
+        <input id="password" name="password" type="password" autocomplete="current-password" required>
+      </div>
+      <button class="button admin-button" type="submit">Sign in</button>
+      <p id="login-message" class="notice hidden"></p>
+    </form>
+
+    <div id="admin-panel" class="hidden admin-panel">
+      <div class="dashboard-grid">
+        <div class="dashboard-stat">
+          <span>Projects</span>
+          <strong id="project-count">0</strong>
+        </div>
+        <div class="dashboard-stat">
+          <span>Enquiries</span>
+          <strong id="submission-count">0</strong>
+        </div>
+      </div>
+
+      <form id="project-form" class="form admin-form-box">
+        <input id="projectId" name="projectId" type="hidden">
+        <div class="admin-card-header compact">
+          <span id="project-form-badge" class="admin-badge accent">Add</span>
+          <h2 id="project-form-title">Add project</h2>
+        </div>
+        <div class="form-grid">
+          <div class="field"><label for="title">TITLE</label><input id="title" name="title" required></div>
+          <div class="field"><label for="tag">CATEGORY</label><input id="tag" name="tag" placeholder="AI | SaaS" required></div>
+          <div class="field"><label for="image">IMAGE URL</label><input id="image" name="image" type="url" required></div>
+          <div class="field"><label for="alt">IMAGE DESCRIPTION</label><input id="alt" name="alt" required></div>
+          <div class="field"><label for="stack">TECHNOLOGIES</label><input id="stack" name="stack" placeholder="React | Node.js" required></div>
+        </div>
+        <div class="field"><label for="description">DESCRIPTION</label><textarea id="description" name="description" rows="4" required></textarea></div>
+        <div class="form-actions">
+          <button id="project-submit" class="button admin-button" type="submit">Add project</button>
+          <button id="cancel-edit" class="button ghost secondary hidden" type="button">Cancel</button>
+        </div>
+        <p id="project-message" class="notice hidden"></p>
+      </form>
+
+      <div class="admin-form-box">
+        <div class="admin-card-header compact">
+          <span class="admin-badge accent">Leads</span>
+          <h2>Recent enquiries</h2>
+        </div>
+        <div id="submission-list" class="submission-list"></div>
+      </div>
+
+      <div class="admin-form-box">
+        <div class="admin-card-header compact">
+          <span class="admin-badge accent">List</span>
+          <h2>Current projects</h2>
+        </div>
+        <div id="admin-projects" class="admin-projects"></div>
+      </div>
+    </div>
+  </section>
+</main>
+<script src="admin.js"></script>
+</body>
+</html>
