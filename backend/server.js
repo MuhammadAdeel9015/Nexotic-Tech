@@ -1,4 +1,5 @@
 const http = require('node:http');
+const crypto = require('node:crypto');
 const fs = require('node:fs/promises');
 const path = require('node:path');
 const { URL } = require('node:url');
@@ -14,7 +15,7 @@ const port = Number(process.env.PORT) || 3000;
 const frontendRoot = path.resolve(__dirname, '..', 'frontend');
 const frontendUrl = (process.env.FRONTEND_URL || '').replace(/\/$/, '');
 const localOrigins = new Set(['http://localhost', 'http://127.0.0.1']);
-const sessions = new Set();
+const sessionMaxAge = 8 * 60 * 60;
 const mimeTypes = {
   '.css': 'text/css; charset=utf-8',
   '.html': 'text/html; charset=utf-8',
@@ -64,8 +65,28 @@ function getCookies(request) {
   }));
 }
 
+function signSession(payload) {
+  return crypto.createHmac('sha256', process.env.SESSION_SECRET).update(payload).digest('base64url');
+}
+
+function createSession() {
+  const expiresAt = Math.floor(Date.now() / 1000) + sessionMaxAge;
+  const payload = `${expiresAt}.${crypto.randomBytes(16).toString('base64url')}`;
+  return `${payload}.${signSession(payload)}`;
+}
+
 function isAdmin(request) {
-  return sessions.has(getCookies(request).admin_session);
+  if (!process.env.SESSION_SECRET) return false;
+  const session = getCookies(request).admin_session;
+  if (!session) return false;
+  const parts = session.split('.');
+  if (parts.length !== 3) return false;
+  const [expiresAt, nonce, signature] = parts;
+  if (!/^\d+$/.test(expiresAt) || !nonce || Number(expiresAt) < Math.floor(Date.now() / 1000)) return false;
+  const expected = signSession(`${expiresAt}.${nonce}`);
+  const actualBuffer = Buffer.from(signature);
+  const expectedBuffer = Buffer.from(expected);
+  return actualBuffer.length === expectedBuffer.length && crypto.timingSafeEqual(actualBuffer, expectedBuffer);
 }
 
 function requireAdmin(request, response) {
@@ -165,7 +186,7 @@ const server = http.createServer(async (request, response) => {
       const payload = JSON.parse(await readRequestBody(request));
       const username = process.env.ADMIN_USERNAME;
       const password = process.env.ADMIN_PASSWORD;
-      if (!username || !password) {
+      if (!username || !password || !process.env.SESSION_SECRET) {
         sendJson(response, 503, { error: 'Admin credentials are not configured on the server.' });
         return;
       }
@@ -173,11 +194,10 @@ const server = http.createServer(async (request, response) => {
         sendJson(response, 401, { error: 'Invalid admin credentials.' });
         return;
       }
-      const token = `${Date.now()}-${Math.random().toString(36).slice(2)}`;
-      sessions.add(token);
+      const token = createSession();
       const sameSite = frontendUrl ? 'None' : 'Strict';
       const secure = frontendUrl && frontendUrl.startsWith('https://') ? '; Secure' : '';
-      response.setHeader('Set-Cookie', `admin_session=${encodeURIComponent(token)}; HttpOnly; SameSite=${sameSite}; Path=/; Max-Age=28800${secure}`);
+      response.setHeader('Set-Cookie', `admin_session=${encodeURIComponent(token)}; HttpOnly; SameSite=${sameSite}; Path=/; Max-Age=${sessionMaxAge}${secure}`);
       response.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
       response.end(JSON.stringify({ message: 'Signed in.' }));
     } catch {
