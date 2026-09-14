@@ -347,7 +347,8 @@ const server = http.createServer(async (request, response) => {
       }
       sendJson(response, 201, { message: 'Your project enquiry has been received.' });
     } catch (error) {
-      sendJson(response, error.message === 'Request body is too large' ? 413 : 400, { error: 'Unable to process this request.' });
+      console.error('Contact submission failed.', error.code || error.name || 'unknown_error');
+      sendJson(response, error.message === 'Request body is too large' ? 413 : 500, { error: 'Unable to process this request.' });
     }
     return;
   }

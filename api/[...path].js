@@ -337,7 +337,8 @@ module.exports = async function handler(request, response) {
       return;
     }
     if (pathname === '/api/contact' && request.method === 'POST') {
-      sendJson(response, 400, { error: 'Unable to process this request.' });
+      console.error('Contact submission failed.', error.code || error.name || 'unknown_error');
+      sendJson(response, error.message === 'Request body is too large' ? 413 : 500, { error: 'Unable to process this request.' });
       return;
     }
     if (pathname === '/api/internship-applications' && request.method === 'POST') {
