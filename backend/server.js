@@ -9,6 +9,7 @@ try {
   if (error.code !== 'ENOENT') throw error;
 }
 const supabase = require('./supabase');
+const { sendContactNotification } = require('./email');
 
 const host = process.env.HOST || '127.0.0.1';
 const port = Number(process.env.PORT) || 3000;
@@ -327,7 +328,7 @@ const server = http.createServer(async (request, response) => {
         sendJson(response, 400, { error: 'Please provide a valid name, email, service, and project description.' });
         return;
       }
-      await saveSubmission({
+      const submission = {
         id: `contact-${Date.now()}`,
         createdAt: new Date().toISOString(),
         name,
@@ -337,7 +338,13 @@ const server = http.createServer(async (request, response) => {
         service,
         budget: String(payload.budget || '').trim(),
         description
-      });
+      };
+      await saveSubmission(submission);
+      try {
+        await sendContactNotification(submission);
+      } catch (error) {
+        console.error('Contact email notification failed.', error.code || error.name || 'unknown_error');
+      }
       sendJson(response, 201, { message: 'Your project enquiry has been received.' });
     } catch (error) {
       sendJson(response, error.message === 'Request body is too large' ? 413 : 400, { error: 'Unable to process this request.' });

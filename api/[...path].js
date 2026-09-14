@@ -8,6 +8,7 @@ try {
 }
 
 const supabase = require('../backend/supabase');
+const { sendContactNotification } = require('../backend/email');
 
 const SESSION_COOKIE = 'admin_session';
 const SESSION_MAX_AGE = 8 * 60 * 60;
@@ -276,7 +277,7 @@ module.exports = async function handler(request, response) {
         sendJson(response, 400, { error: 'Please provide a valid name, email, service, and project description.' });
         return;
       }
-      await saveSubmission({
+      const submission = {
         id: `contact-${Date.now()}`,
         createdAt: new Date().toISOString(),
         name,
@@ -286,7 +287,13 @@ module.exports = async function handler(request, response) {
         service,
         budget: String(payload.budget || '').trim(),
         description
-      });
+      };
+      await saveSubmission(submission);
+      try {
+        await sendContactNotification(submission);
+      } catch (error) {
+        console.error('Contact email notification failed.', error.code || error.name || 'unknown_error');
+      }
       sendJson(response, 201, { message: 'Your project enquiry has been received.' });
       return;
     }
