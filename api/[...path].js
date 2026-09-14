@@ -337,7 +337,15 @@ module.exports = async function handler(request, response) {
       return;
     }
     if (pathname === '/api/contact' && request.method === 'POST') {
-      console.error('Contact submission failed.', error.code || error.name || 'unknown_error');
+      const errorDetails = Object.fromEntries(Object.entries({
+        name: error?.name,
+        message: error?.message,
+        code: error?.code,
+        details: error?.details,
+        hint: error?.hint,
+        status: error?.status
+      }).filter(([, value]) => value !== undefined && value !== null));
+      console.error('Contact submission failed.', errorDetails);
       sendJson(response, error.message === 'Request body is too large' ? 413 : 500, { error: 'Unable to process this request.' });
       return;
     }
