@@ -1,5 +1,4 @@
 {
   "buildCommand": "npm run build:frontend",
-  "outputDirectory": "frontend",
-  "cleanUrls": true
+  "outputDirectory": "frontend"
 }
